@@ -1,0 +1,5 @@
+Levels,1,2,3,4
+ElfArden.DefensePower,1.1,1.3,1.5,1.8
+ElfArdenMaxHealth,100,120,150,180
+ElfArden.MaxRage,75,85,100,120
+ElfArden.AttackPower,1.4,1.6,2,2.5

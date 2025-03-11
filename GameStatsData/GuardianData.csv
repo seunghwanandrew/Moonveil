@@ -1,0 +1,5 @@
+Levels,1,2,3,4
+Guardian.DefensePower,1.05,1.15,1.3,1.5
+Guardian.MaxHealth,75,85,90,95
+Guardian.AttackPower,0.8,0.9,1.1,1.3
+Guardian.BaseDamage,7,8.5,10,13
