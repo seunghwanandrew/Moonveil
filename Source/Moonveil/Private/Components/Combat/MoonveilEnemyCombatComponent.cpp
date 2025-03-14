@@ -2,6 +2,9 @@
 #include "Components/Combat/MoonveilEnemyCombatComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GamePlayTags/MoonveilGameplayTags.h"
+#include "FunctionLibrary/MoonveilFunctionLibrary.h"
+
+#include "MoonveilDebugHelpers.h"
 
 void UMoonveilEnemyCombatComponent::TargetOnWeapon(AActor* Target)
 {
@@ -13,12 +16,12 @@ void UMoonveilEnemyCombatComponent::TargetOnWeapon(AActor* Target)
 
 	bool bIsValidBlock = false;
 
-	const bool bIsPlayerBlocking = false;
+	const bool bIsPlayerBlocking = UMoonveilFunctionLibrary::NativeDoesActorHaveGameplayTag(Target, FMoonveilGameplayTags::Player_Status_Blocking);
 	const bool bIsMyAttackUnblockable = false;
 
 	if (bIsPlayerBlocking && !bIsMyAttackUnblockable)
 	{
-		// TODO - Check It the Block Is Valid
+		bIsValidBlock = UMoonveilFunctionLibrary::IsValidBlock(GetOwningPawn(), Target);
 	}
 
 	FGameplayEventData EventData;
@@ -27,11 +30,11 @@ void UMoonveilEnemyCombatComponent::TargetOnWeapon(AActor* Target)
 
 	if (bIsValidBlock)
 	{
-		// TODO - Handle Blocking Process
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Target, FMoonveilGameplayTags::Event_Block_Successed, EventData);
 	}
 	else
 	{
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwningPawn(), FMoonveilGameplayTags::Event_Hit_Melee, EventData);
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwningPawn(), FMoonveilGameplayTags::Event_Attack_Melee, EventData);
 	}
 }
 

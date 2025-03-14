@@ -11,7 +11,6 @@ class MOONVEIL_API UMoonveilEnemyCombatComponent : public UMoonveilBaseCombatCom
 {
 	GENERATED_BODY()
 
-
 protected:
 	virtual void TargetOnWeapon(AActor* Target) override;
 	virtual void TargetOffWeapon(AActor* Target) override;

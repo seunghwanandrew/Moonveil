@@ -22,8 +22,15 @@ float UMoonveilPlayerCombatComponent::GetPlayerCurrentEquippedWeaponDamageAtLeve
 void UMoonveilPlayerCombatComponent::TargetOnWeapon(AActor* Target)
 {
     Super::TargetOnWeapon(Target);
+    if (OverlappedTargetArray.Contains(Target)) return;
+    OverlappedTargetArray.AddUnique(Target);
 
-    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwningPawn(), FMoonveilGameplayTags::Event_Hit_Pause, FGameplayEventData());
+    FGameplayEventData Data;
+    Data.Instigator = GetOwningPawn();
+    Data.Target = Target;
+
+    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwningPawn(), FMoonveilGameplayTags::Event_Attack_Melee, Data);
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwningPawn(), FMoonveilGameplayTags::Event_Hit_Pause, FGameplayEventData());
 }
 
 void UMoonveilPlayerCombatComponent::TargetOffWeapon(AActor* Target)

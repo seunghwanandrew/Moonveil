@@ -5,6 +5,8 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GamePlayTags/MoonveilGameplayTags.h"
 
+#include "MoonveilDebugHelpers.h"
+
 void UMoonveilBaseCombatComponent::RegisterSpawnedWeapon(AMoonveilBaseWeapon* WeaponToRegister, const FGameplayTag& WeaponTagToRegister, bool bShouldbeEquippedAsCurrentWeapon)
 {
     if (CharacterCarriedWeapons.Contains(WeaponTagToRegister)) return;
@@ -65,14 +67,7 @@ void UMoonveilBaseCombatComponent::ToggleWeaponCollision(bool bWeaponCollisionEn
 
 void UMoonveilBaseCombatComponent::TargetOnWeapon(AActor* Target)
 {
-    if (OverlappedTargetArray.Contains(Target)) return;
-    OverlappedTargetArray.AddUnique(Target);
-
-    FGameplayEventData Data;
-    Data.Instigator = GetOwningPawn();
-    Data.Target = Target;
-
-    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwningPawn(), FMoonveilGameplayTags::Event_Attack_Melee, Data);
+	check(Target);
 }
 
 void UMoonveilBaseCombatComponent::TargetOffWeapon(AActor* Target)

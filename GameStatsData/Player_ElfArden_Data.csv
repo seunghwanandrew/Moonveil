@@ -3,3 +3,5 @@ ElfArden.DefensePower,1.1,1.3,1.5,1.8
 ElfArdenMaxHealth,100,120,150,180
 ElfArden.MaxRage,75,85,100,120
 ElfArden.AttackPower,1.4,1.6,2,2.5
+ElfArden.RollDistance,480,500,530,570
+ElfArden.PerfectBlockTime,0.35,0.3,0.25,0.2

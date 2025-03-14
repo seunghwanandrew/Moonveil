@@ -9,6 +9,7 @@
 #include "MoonveilFunctionLibrary.generated.h"
 
 class UMoonveilAbilitySystemComponent;
+struct FScalableFloat;
 
 UCLASS()
 class MOONVEIL_API UMoonveilFunctionLibrary : public UBlueprintFunctionLibrary
@@ -39,4 +40,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "MoonveilFunctionLibrary")
 	static bool IsTargetPawnHostile(APawn* Query, APawn* Target);
+
+	UFUNCTION(BlueprintPure, Category = "MoonveilFunctionLibrary", meta = (ApplyLevel = "1"))
+	static float GetFloatValueFromScalableFloatAtLevel(const FScalableFloat& ScalableFloat, int32 ApplyLevel);
+
+	UFUNCTION(BlueprintPure, Category = "MoonveilFunctionLibrary")
+	static FGameplayTag ComputeHitReactDirectionTag(AActor* Attacker, AActor* Target, float& OutDifferences);
+
+	UFUNCTION(BlueprintPure, Category = "MoonveilFunctionLibrary")
+	static bool IsValidBlock(AActor* Attacker, AActor* Target);
 };

@@ -33,6 +33,15 @@ protected:
 	virtual void PossessedBy(AController* NewContrller) override;
 
 private:
+	void Input_Move(const FInputActionValue& InputValue);
+	void Input_Look(const FInputActionValue& InputValue);
+
+	void Input_AbilityOnPressed(FGameplayTag AbilityInputTag);
+	void Input_AbilityOnReleased(FGameplayTag AbilityInputTag);
+
+	void Input_SwitchTargetTriggered(const FInputActionValue& InputValue);
+	void Input_SwitchTargetCompleted(const FInputActionValue& InputValue);
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components|Camera", meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
 
@@ -48,8 +57,5 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "DataAssets|Input", meta = (AllowPrivateAccess = "true"))
 	UMoonveilInputConfigDataAsset* InputConfigData;
 
-	void Input_Move(const FInputActionValue& InputValue);
-	void Input_Look(const FInputActionValue& InputValue);
-	void Input_AbilityOnPressed(FGameplayTag AbilityInputTag);
-	void Input_AbilityOnReleased(FGameplayTag AbilityInputTag);
+	FVector2D SwitchDirection = FVector2D::ZeroVector;
 };

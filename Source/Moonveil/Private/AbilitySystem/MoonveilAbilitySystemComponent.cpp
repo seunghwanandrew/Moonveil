@@ -2,6 +2,7 @@
 #include "AbilitySystem/MoonveilAbilitySystemComponent.h"
 #include "AbilitySystem/Abilities/MoonveilPlayerGameplayAbility.h"
 #include "StructTypes/MoonveilStructTypes.h"
+#include "GamePlayTags/MoonveilGameplayTags.h"
 
 void UMoonveilAbilitySystemComponent::GrantWeaponAbility(const TArray<FPlayerGameplayAbilitySet>& WeaponAbility, int32 ApplyLevel, TArray<FGameplayAbilitySpecHandle>& OutSpecHandle)
 {
@@ -62,11 +63,34 @@ void UMoonveilAbilitySystemComponent::TagAbilityOnPressed(FGameplayTag AbilityIn
 	for (const FGameplayAbilitySpec& Ability : GetActivatableAbilities())
 	{
 		if (!Ability.DynamicAbilityTags.HasTagExact(AbilityInputTag)) continue;
-		
-		TryActivateAbility(Ability.Handle);
+
+		if (AbilityInputTag.MatchesTag(FMoonveilGameplayTags::InputTag_Toggleable))
+		{
+			if (Ability.IsActive())
+			{
+				CancelAbilityHandle(Ability.Handle);
+			}
+			else
+			{
+				TryActivateAbility(Ability.Handle);
+			}
+		}
+		else
+		{
+			TryActivateAbility(Ability.Handle);
+		}
 	}
 }
 
 void UMoonveilAbilitySystemComponent::TagAbilityOnReleased(FGameplayTag AbilityInputTag)
 {
+	if (!AbilityInputTag.IsValid() || !AbilityInputTag.MatchesTag(FMoonveilGameplayTags::InputTag_OnPressed)) return;
+
+	for (const FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		if (AbilitySpec.DynamicAbilityTags.HasTagExact(AbilityInputTag) && AbilitySpec.IsActive())
+		{
+			CancelAbilityHandle(AbilitySpec.Handle);
+		}
+	}
 }

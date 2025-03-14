@@ -12,6 +12,9 @@
 #include "Components/Combat/MoonveilPlayerCombatComponent.h"
 #include "AbilitySystem/MoonveilAbilitySystemComponent.h"
 #include "Components/UI/MoonveilPlayerUIComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
+
+#include "MoonveilDebugHelpers.h"
 
 UMoonveilBaseCombatComponent* AMoonveilPlayerCharacter::GetPawnCombatComponent() const
 {
@@ -70,6 +73,9 @@ void AMoonveilPlayerCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 	EnhancedInputComponent->BindNativeInputAction(InputConfigData, FMoonveilGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &AMoonveilPlayerCharacter::Input_Move);
 	EnhancedInputComponent->BindNativeInputAction(InputConfigData, FMoonveilGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &AMoonveilPlayerCharacter::Input_Look);
+	EnhancedInputComponent->BindNativeInputAction(InputConfigData, FMoonveilGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Triggered, this, &AMoonveilPlayerCharacter::Input_SwitchTargetTriggered);
+	EnhancedInputComponent->BindNativeInputAction(InputConfigData, FMoonveilGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Completed, this, &AMoonveilPlayerCharacter::Input_SwitchTargetCompleted);
+
 	EnhancedInputComponent->BindAbilityInputAction(InputConfigData, this, &AMoonveilPlayerCharacter::Input_AbilityOnPressed, &AMoonveilPlayerCharacter::Input_AbilityOnReleased);
 }
 
@@ -122,4 +128,19 @@ void AMoonveilPlayerCharacter::Input_AbilityOnPressed(FGameplayTag AbilityInputT
 void AMoonveilPlayerCharacter::Input_AbilityOnReleased(FGameplayTag AbilityInputTag)
 {
 	AbilitySystemComponent->TagAbilityOnReleased(AbilityInputTag);
+}
+
+void AMoonveilPlayerCharacter::Input_SwitchTargetTriggered(const FInputActionValue& InputValue)
+{
+	SwitchDirection = InputValue.Get<FVector2D>();
+}
+
+void AMoonveilPlayerCharacter::Input_SwitchTargetCompleted(const FInputActionValue& InputValue)
+{
+	FGameplayEventData EventData;
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+		this, 
+		SwitchDirection.X < 0.0f ? FMoonveilGameplayTags::Player_TargetSwitch_Left : FMoonveilGameplayTags::Player_TargetSwitch_Right,
+		EventData);
 }

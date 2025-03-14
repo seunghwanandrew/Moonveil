@@ -14,6 +14,11 @@ class MOONVEIL_API UMoonveilBasicGameplayAbility : public UGameplayAbility
 	GENERATED_BODY()
 	
 public:
+#pragma region Interfaces
+	//~ Begin UGameplayAbility Interface.
+	virtual bool DoesAbilitySatisfyTagRequirements(const UAbilitySystemComponent& AbilitySystemComponent, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
+	//~ End UGameplayAbility Interface
+#pragma endregion
 	virtual void OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
